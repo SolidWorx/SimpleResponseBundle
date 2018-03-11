@@ -9,8 +9,15 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    # Core handlers
     simple_response.handler.template_response:
         class: SolidWorx\SimpleResponseBundle\Handler\TemplateResponseHandler
         arguments: ['@templating']
+        tags:
+            - { name: 'response_handler.handler' }
+
+    simple_response.handler.redirect_response:
+        class: SolidWorx\SimpleResponseBundle\Handler\RouteRedirectResponse
+        arguments: ['@router']
         tags:
             - { name: 'response_handler.handler' }
