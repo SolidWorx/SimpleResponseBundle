@@ -37,7 +37,7 @@ class ResponseHandler
     {
         foreach ($this->handlers as $handler) {
             if ($handler->supports($object)) {
-                $handler->handle($object);
+                return $handler->handle($object);
             }
         }
 
