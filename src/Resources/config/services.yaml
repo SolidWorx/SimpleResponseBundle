@@ -8,3 +8,9 @@ services:
         arguments: ['@simple_response_handler.handler']
         tags:
             - { name: kernel.event_subscriber }
+
+    simple_response.handler.template_response:
+        class: SolidWorx\SimpleResponseBundle\Handler\TemplateResponseHandler
+        arguments: ['@templating']
+        tags:
+            - { name: 'response_handler.handler' }
