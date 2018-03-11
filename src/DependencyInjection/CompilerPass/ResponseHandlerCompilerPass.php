@@ -33,7 +33,7 @@ class ResponseHandlerCompilerPass implements CompilerPassInterface
         $definition = $container->getDefinition('simple_response_handler.handler');
 
         foreach (array_keys($container->findTaggedServiceIds('response_handler.handler')) as $serviceId) {
-            $definition->addMethodCall('addHandler', new Reference($serviceId));
+            $definition->addMethodCall('addHandler', [new Reference($serviceId)]);
         }
     }
 }
