@@ -1,0 +1,10 @@
+services:
+
+    simple_response_handler.handler:
+        class: SolidWorx\SimpleResponseBundle\ResponseHandler
+
+    simple_response_handler.event.listener:
+        class: SolidWorx\SimpleResponseBundle\ResponseHandlerListener
+        arguments: ['@simple_response_handler.handler']
+        tags:
+            - { name: kernel.event_subscriber }
