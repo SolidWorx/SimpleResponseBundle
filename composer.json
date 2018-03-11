@@ -1,0 +1,23 @@
+{
+    "name": "solidworx/simple-response-bundle",
+    "description": "A Symfony bundle to return simple reponses in your controllers",
+    "type": "symfony-bundle",
+    "autoload": {
+        "psr-4": {
+            "SolidWorx\\SimpleResponseBundle\\": "src"
+        }
+    },
+    "require": {
+        "symfony/framework-bundle": "^3.0 | ^4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pierre du Plessis",
+            "email": "open-source@solidworx.co"
+        }
+    ]
+}
