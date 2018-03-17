@@ -17,7 +17,7 @@ services:
             - { name: 'response_handler.handler' }
 
     simple_response.handler.redirect_response:
-        class: SolidWorx\SimpleResponseBundle\Handler\RouteRedirectResponse
+        class: SolidWorx\SimpleResponseBundle\Handler\RouteRedirectHandler
         arguments: ['@router']
         tags:
             - { name: 'response_handler.handler' }
