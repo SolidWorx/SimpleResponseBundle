@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace SolidWorx\SimpleResponseBundle\Handler;
 
 use SolidWorx\SimpleResponseBundle\ResponseHandlerInterface;
+use SolidWorx\SimpleResponseBundle\Response\RouteRedirectResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
@@ -35,6 +36,6 @@ class RouteRedirectHandler implements ResponseHandlerInterface
 
     public function supports($object): bool
     {
-        return $object instanceof RedirectResponse;
+        return $object instanceof RouteRedirectResponse;
     }
 }
