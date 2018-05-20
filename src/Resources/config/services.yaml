@@ -1,23 +1,18 @@
 services:
 
-    simple_response_handler.handler:
-        class: SolidWorx\SimpleResponseBundle\ResponseHandler
+    _defaults:
+        autowire: true
+        public: false
+        autoconfigure: true
 
-    simple_response_handler.event.listener:
-        class: SolidWorx\SimpleResponseBundle\ResponseHandlerListener
-        arguments: ['@simple_response_handler.handler']
-        tags:
-            - { name: kernel.event_subscriber }
+    SolidWorx\SimpleResponseBundle\ResponseHandler: ~
+
+    SolidWorx\SimpleResponseBundle\ResponseHandlerListener:
+        tags: ['kernel.event_subscriber']
 
     # Core handlers
-    simple_response.handler.template_response:
-        class: SolidWorx\SimpleResponseBundle\Handler\TemplateResponseHandler
-        arguments: ['@templating']
-        tags:
-            - { name: 'response_handler.handler' }
+    SolidWorx\SimpleResponseBundle\Handler\TemplateResponseHandler:
+        tags: ['response_handler.handler']
 
-    simple_response.handler.redirect_response:
-        class: SolidWorx\SimpleResponseBundle\Handler\RouteRedirectHandler
-        arguments: ['@router']
-        tags:
-            - { name: 'response_handler.handler' }
+    SolidWorx\SimpleResponseBundle\Handler\RouteRedirectHandler:
+        tags: ['response_handler.handler']

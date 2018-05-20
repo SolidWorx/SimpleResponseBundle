@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace SolidWorx\SimpleResponseBundle\DependencyInjection\CompilerPass;
 
+use SolidWorx\SimpleResponseBundle\ResponseHandler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -26,11 +27,11 @@ class ResponseHandlerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('simple_response_handler.handler')) {
+        if (!$container->hasDefinition(ResponseHandler::class)) {
             return;
         }
 
-        $definition = $container->getDefinition('simple_response_handler.handler');
+        $definition = $container->getDefinition(ResponseHandler::class);
 
         foreach (array_keys($container->findTaggedServiceIds('response_handler.handler')) as $serviceId) {
             $definition->addMethodCall('addHandler', [new Reference($serviceId)]);
