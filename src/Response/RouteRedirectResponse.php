@@ -11,30 +11,21 @@ declare(strict_types=1);
 
 namespace SolidWorx\SimpleResponseBundle\Response;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class RouteRedirectResponse
+final class RouteRedirectResponse extends RedirectResponse
 {
-    /**
-     * @var string
-     */
-    private $route;
+    private string $route;
 
-    /**
-     * @var int
-     */
-    private $statusCode;
+    private array $parameters;
 
-    /**
-     * @var array
-     */
-    private $parameters;
-
-    public function __construct(string $route, array $parameters = [], int $statusCode = Response::HTTP_SEE_OTHER)
+    public function __construct(string $route = '', array $parameters = [], int $status = Response::HTTP_FOUND, array $headers = [])
     {
         $this->route = $route;
-        $this->statusCode = $statusCode;
         $this->parameters = $parameters;
+
+        parent::__construct('', $status, $headers);
     }
 
     public function getRoute(): string
@@ -47,11 +38,6 @@ class RouteRedirectResponse
         return $this->parameters;
     }
 
-    public function getStatusCode(): int
-    {
-        return $this->statusCode;
-    }
-
     public function setRoute(string $route): self
     {
         $this->route = $route;
@@ -62,13 +48,6 @@ class RouteRedirectResponse
     public function setParameters(array $parameters): self
     {
         $this->parameters = $parameters;
-
-        return $this;
-    }
-
-    public function setStatusCode(int $statusCode): self
-    {
-        $this->statusCode = $statusCode;
 
         return $this;
     }

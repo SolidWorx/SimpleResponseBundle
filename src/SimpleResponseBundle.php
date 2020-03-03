@@ -15,10 +15,6 @@ use SolidWorx\SimpleResponseBundle\DependencyInjection\CompilerPass\ResponseHand
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class SimpleResponseBundle extends Bundle
+final class SimpleResponseBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
-    {
-        $container->addCompilerPass(new ResponseHandlerCompilerPass());
-    }
 }

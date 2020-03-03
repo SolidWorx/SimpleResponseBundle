@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 interface ResponseHandlerInterface
 {
-    public function handle($object): Response;
+    public function handle(Response $object): Response;
 
-    public function supports($object): bool;
+    public function supports(Response $object): bool;
 }

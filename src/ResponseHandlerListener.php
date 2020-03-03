@@ -12,15 +12,13 @@ declare(strict_types=1);
 namespace SolidWorx\SimpleResponseBundle;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class ResponseHandlerListener implements EventSubscriberInterface
+final class ResponseHandlerListener implements EventSubscriberInterface
 {
-    /**
-     * @var ResponseHandler
-     */
-    private $handler;
+    private ResponseHandler $handler;
 
     public function __construct(ResponseHandler $handler)
     {
@@ -41,6 +39,8 @@ class ResponseHandlerListener implements EventSubscriberInterface
     {
         $result = $event->getControllerResult();
 
-        $event->setResponse($this->handler->handle($result));
+        if ($result instanceof Response && '' === $result->getContent()) {
+            $event->setResponse($this->handler->handle($result));
+        }
     }
 }

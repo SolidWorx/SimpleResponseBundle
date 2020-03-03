@@ -13,27 +13,19 @@ namespace SolidWorx\SimpleResponseBundle;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class ResponseHandler
+final class ResponseHandler
 {
     /**
-     * @var ResponseHandlerInterface[]
+     * @var ResponseHandlerInterface[]|iterable
      */
-    private $handlers = [];
+    private iterable $handlers;
 
-    public function __construct(array $handlers = [])
+    public function __construct(iterable $handlers)
     {
-        foreach ($handlers as $handler) {
-            $this->addHandler($handler);
-        }
+        $this->handlers = $handlers;
     }
 
-    /**
-     * @param object $object
-     *
-     * @return Response
-     * @throws \InvalidArgumentException
-     */
-    public function handle($object): Response
+    public function handle(Response $object): Response
     {
         foreach ($this->handlers as $handler) {
             if ($handler->supports($object)) {
@@ -42,10 +34,5 @@ class ResponseHandler
         }
 
         throw new \InvalidArgumentException(sprintf('There are no handlers available to handle object of type %s', get_class($object)));
-    }
-
-    public function addHandler(ResponseHandlerInterface $handler): void
-    {
-        $this->handlers[] = $handler;
     }
 }

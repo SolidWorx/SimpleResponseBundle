@@ -5,14 +5,16 @@ services:
         public: false
         autoconfigure: true
 
-    SolidWorx\SimpleResponseBundle\ResponseHandler: ~
+    _instanceof:
+        SolidWorx\SimpleResponseBundle\ResponseHandlerInterface:
+            tags: ['solidworx.response_handler']
+
+    SolidWorx\SimpleResponseBundle\ResponseHandler:
+        arguments: [!tagged_iterator 'solidworx.response_handler']
 
     SolidWorx\SimpleResponseBundle\ResponseHandlerListener:
         tags: ['kernel.event_subscriber']
 
     # Core handlers
-    SolidWorx\SimpleResponseBundle\Handler\TemplateResponseHandler:
-        tags: ['response_handler.handler']
-
-    SolidWorx\SimpleResponseBundle\Handler\RouteRedirectHandler:
-        tags: ['response_handler.handler']
+    SolidWorx\SimpleResponseBundle\Handler\TemplateResponseHandler: ~
+    SolidWorx\SimpleResponseBundle\Handler\RouteRedirectHandler: ~

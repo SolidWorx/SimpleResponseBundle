@@ -11,30 +11,28 @@ declare(strict_types=1);
 
 namespace SolidWorx\SimpleResponseBundle\Handler;
 
-use SolidWorx\SimpleResponseBundle\ResponseHandlerInterface;
 use SolidWorx\SimpleResponseBundle\Response\RouteRedirectResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use SolidWorx\SimpleResponseBundle\ResponseHandlerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class RouteRedirectHandler implements ResponseHandlerInterface
+final class RouteRedirectHandler implements ResponseHandlerInterface
 {
-    /**
-     * @var RouterInterface
-     */
-    private $router;
+    private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(RouterInterface $router)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
     }
 
-    public function handle($object): Response
+    public function handle(Response $object): Response
     {
-        return new RedirectResponse($this->router->generate($object->getRoute(), $object->getParameters()), $object->getStatusCode());
+        /* @var RouteRedirectResponse $object */
+
+        return $object->setTargetUrl($this->urlGenerator->generate($object->getRoute(), $object->getParameters()));
     }
 
-    public function supports($object): bool
+    public function supports(Response $object): bool
     {
         return $object instanceof RouteRedirectResponse;
     }

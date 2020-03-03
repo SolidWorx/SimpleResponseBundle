@@ -95,11 +95,9 @@ This class needs to implement the `SolidWorx\SimpleResponseBundle\ResponseHandle
 
 ```yml
 services:
-    some.service.name:
-        class: My\Custom\Handler
+    My\Custom\Handler:
         arguments: ['@doctrine.orm.entity_manager']
-        tags:
-            - { name: 'response_handler.handler' }
+        tags: ['solidworx.response_handler']
             
 ```
 
@@ -108,16 +106,18 @@ You then need to create a class that will be used as the return value in your ac
 
 ```php
 <?php
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-class DoctrineEntityResponse
+class DoctrineEntityResponse extends JsonResponse
 {
     private $entity;
     
     public function __construct(string $entity)
     {
         $this->entity = $entity;
+        parent::__construct();
     }
-    
+
     public function getEntity(): string
     {
         return $this->entity;
@@ -129,6 +129,8 @@ Your handler class will add the logic to return a response object;
 
 ```php
 <?php
+use SolidWorx\SimpleResponseBundle\ResponseHandlerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class Handler implements ResponseHandlerInterface
 {
@@ -139,14 +141,14 @@ class Handler implements ResponseHandlerInterface
         $this->em = $entityManager;
     }
     
-    public function supports($object): bool
+    public function supports(Response $object): bool
     {
-        return $object instance of DoctrineEntityReponse; // Only support responses of this type
+        return $object instanceof DoctrineEntityReponse; // Only support responses of this type
     }
     
-    public function handle($object)
+    public function handle(Response $object): Response
     {
-        return new JsonResponse($this->em->getRepository($object->getEntity())->findAll()); // Return all records in the entity as a JSON response
+        return $object->setData($this->em->getRepository($object->getEntity())->findAll()); // Return all records in the entity as a JSON response
     }
 }
 ```
@@ -162,7 +164,7 @@ class MyAction
 {
     public function __invoke()
     {
-        return new DoctrineEntityResponse('AppBundle:Order'); // Pass the Order entity which will return all orders in a JSON response
+        return new DoctrineEntityResponse(\App\Entity\Order::class); // Pass the Order entity which will return all orders in a JSON response
     }
 }
 

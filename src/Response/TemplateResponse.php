@@ -13,28 +13,18 @@ namespace SolidWorx\SimpleResponseBundle\Response;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class TemplateResponse
+final class TemplateResponse extends Response
 {
-    /**
-     * @var string
-     */
-    private $template;
+    private string $template;
 
-    /**
-     * @var array
-     */
-    private $params;
+    private array $context;
 
-    /**
-     * @var Response
-     */
-    private $response;
-
-    public function __construct(string $template = null, array $params = [], Response $response = null)
+    public function __construct(string $template = '', array $context = [], int $status = Response::HTTP_OK, array $headers = [])
     {
         $this->template = $template;
-        $this->params = $params;
-        $this->response = $response ?: new Response();
+        $this->context = $context;
+
+        parent::__construct('', $status, $headers);
     }
 
     public function getTemplate(): ?string
@@ -42,19 +32,21 @@ class TemplateResponse
         return $this->template;
     }
 
-    public function getParams(): array
+    public function getContext(): array
     {
-        return $this->params;
-    }
-
-    public function getResponse(): ?Response
-    {
-        return $this->response;
+        return $this->context;
     }
 
     public function setTemplate(string $template): self
     {
         $this->template = $template;
+
+        return $this;
+    }
+
+    public function setContext(array $context): self
+    {
+        $this->context = $context;
 
         return $this;
     }

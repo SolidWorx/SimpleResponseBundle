@@ -13,28 +13,25 @@ namespace SolidWorx\SimpleResponseBundle\Handler;
 
 use SolidWorx\SimpleResponseBundle\Response\TemplateResponse;
 use SolidWorx\SimpleResponseBundle\ResponseHandlerInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
-class TemplateResponseHandler implements ResponseHandlerInterface
+final class TemplateResponseHandler implements ResponseHandlerInterface
 {
-    /**
-     * @var EngineInterface
-     */
-    private $engine;
+    private Environment $twig;
 
-    public function __construct(EngineInterface $engine)
+    public function __construct(Environment $twig)
     {
-        $this->engine = $engine;
+        $this->twig = $twig;
     }
 
-    public function handle($object): Response
+    public function handle(Response $object): Response
     {
         /* @var TemplateResponse $object */
-        return $this->engine->renderResponse($object->getTemplate(), $object->getParams(), $object->getResponse());
+        return $object->setContent($this->twig->render($object->getTemplate(), $object->getContext()));
     }
 
-    public function supports($object): bool
+    public function supports(Response $object): bool
     {
         return $object instanceof TemplateResponse;
     }
